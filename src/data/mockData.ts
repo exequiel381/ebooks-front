@@ -1,5 +1,5 @@
 export interface Book {
-  id: number;
+  id: string;
   title: string;
   author: string;
   price: number;
@@ -11,7 +11,7 @@ export interface Book {
 export const mockBooks: Book[] = [
   // Programming
   {
-    id: 1,
+    id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     title: "Clean Code: A Handbook of Agile Software Craftsmanship",
     author: "Robert C. Martin",
     price: 29.99,
@@ -20,7 +20,7 @@ export const mockBooks: Book[] = [
     description: "Even bad code can function. But if code isn't clean, it can bring a development organization to its knees. Every year, countless hours and significant resources are lost because of poorly written code. But it doesn't have to be that way."
   },
   {
-    id: 2,
+    id: "b2c3d4e5-f6g7-8901-bcde-f23456789012",
     title: "JavaScript: The Good Parts",
     author: "Douglas Crockford",
     price: 24.99,
@@ -29,7 +29,7 @@ export const mockBooks: Book[] = [
     description: "Most programming languages contain good and bad parts, but JavaScript has more than its share of the bad, having been developed and released in a hurry before it could be refined. This authoritative book scrapes away these bad features to reveal a subset of JavaScript that's more reliable, readable, and maintainable."
   },
   {
-    id: 3,
+    id: "c3d4e5f6-g7h8-9012-cdef-345678901234",
     title: "You Don't Know JS: Scope & Closures",
     author: "Kyle Simpson",
     price: 19.99,
@@ -40,7 +40,7 @@ export const mockBooks: Book[] = [
 
   // Business
   {
-    id: 4,
+    id: "d4e5f6g7-h8i9-0123-defg-456789012345",
     title: "The Lean Startup",
     author: "Eric Ries",
     price: 22.99,
@@ -49,7 +49,7 @@ export const mockBooks: Book[] = [
     description: "Most startups fail. But many of those failures are preventable. The Lean Startup is a new approach being adopted across the globe, changing the way companies are built and new products are launched."
   },
   {
-    id: 5,
+    id: "e5f6g7h8-i9j0-1234-efgh-567890123456",
     title: "Good to Great",
     author: "Jim Collins",
     price: 27.99,
@@ -60,7 +60,7 @@ export const mockBooks: Book[] = [
 
   // Science Fiction
   {
-    id: 6,
+    id: "f6g7h8i9-j0k1-2345-fghi-678901234567",
     title: "Dune",
     author: "Frank Herbert",
     price: 15.99,
@@ -69,7 +69,7 @@ export const mockBooks: Book[] = [
     description: "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, who would become the mysterious man known as Muad'Dib. He would avenge the traitorous plot against his noble family—and would bring to fruition humankind's most ancient and unattainable dream."
   },
   {
-    id: 7,
+    id: "g7h8i9j0-k1l2-3456-ghij-789012345678",
     title: "The Martian",
     author: "Andy Weir",
     price: 18.99,
@@ -80,7 +80,7 @@ export const mockBooks: Book[] = [
 
   // Self-Help
   {
-    id: 8,
+    id: "h8i9j0k1-l2m3-4567-hijk-890123456789",
     title: "Atomic Habits",
     author: "James Clear",
     price: 21.99,
@@ -89,7 +89,7 @@ export const mockBooks: Book[] = [
     description: "No matter your goals, Atomic Habits offers a proven framework for improving--every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results."
   },
   {
-    id: 9,
+    id: "i9j0k1l2-m3n4-5678-ijkl-901234567890",
     title: "The 7 Habits of Highly Effective People",
     author: "Stephen R. Covey",
     price: 25.99,
@@ -100,7 +100,7 @@ export const mockBooks: Book[] = [
 
   // History
   {
-    id: 10,
+    id: "j0k1l2m3-n4o5-6789-jklm-012345678901",
     title: "Sapiens: A Brief History of Humankind",
     author: "Yuval Noah Harari",
     price: 23.99,
@@ -109,7 +109,7 @@ export const mockBooks: Book[] = [
     description: "From a renowned historian comes a groundbreaking narrative of humanity's creation and evolution—a #1 international bestseller—that explores the ways in which biology and history have defined us and enhanced our understanding of what it means to be 'human.'"
   },
   {
-    id: 11,
+    id: "k1l2m3n4-o5p6-7890-klmn-123456789012",
     title: "The Guns of August",
     author: "Barbara W. Tuchman",
     price: 20.99,
@@ -122,7 +122,7 @@ export const mockBooks: Book[] = [
 export const categories: string[] = [
   "All",
   "Programming",
-  "Business", 
+  "Business",
   "Science Fiction",
   "Self-Help",
   "History"

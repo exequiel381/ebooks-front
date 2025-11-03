@@ -4,7 +4,7 @@ import { mockBooks } from '../data/mockData';
 
 const BookDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const book = mockBooks.find(book => book.id === Number(id));
+  const book = mockBooks.find(book => book.id === id);
 
   if (!book) {
     return <Navigate to="/" replace />;
