@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { mockBooks, categories } from '../data/mockData';
+import React, { useState } from 'react';
+import { categories } from '../data/mockData';
 import Sidebar from '../components/Sidebar';
 import BookCard from '../components/BookCard';
+import { useEbooksPaginated } from '../hooks';
+import type { Ebook } from '../types/api';
 
 const BookListPage: React.FC = () => {
-  const [books, setBooks] = useState(mockBooks);
+  const { data: books } = useEbooksPaginated();
   const [selectedCategory, setSelectedCategory] = useState('All');
-
-  useEffect(() => {
-    if (selectedCategory === 'All') {
-      setBooks(mockBooks);
-    } else {
-      setBooks(mockBooks.filter(book => book.category === selectedCategory));
-    }
-  }, [selectedCategory]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -26,7 +20,7 @@ const BookListPage: React.FC = () => {
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
       />
-      
+
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
           <header className="mb-8">
@@ -37,12 +31,12 @@ const BookListPage: React.FC = () => {
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {books.map((book) => (
+            {books?.data.map((book: Ebook) => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>
 
-          {books.length === 0 && (
+          {books?.data.length === 0 && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400 text-lg">No books found in this category.</p>
             </div>
