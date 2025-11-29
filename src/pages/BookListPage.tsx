@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { categories } from '../data/mockData';
 import Sidebar from '../components/Sidebar';
 import BookCard from '../components/BookCard';
-import { useEbooksPaginated } from '../hooks';
+import { useCategories, useEbooksPaginated } from '../hooks';
 import type { Ebook } from '../types/api';
 
 const BookListPage: React.FC = () => {
   const { data: books } = useEbooksPaginated();
+  const { data: categories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const handleCategoryChange = (category: string) => {
@@ -16,7 +16,7 @@ const BookListPage: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Sidebar
-        categories={categories}
+        categories={categories?.map(c => c.name) || []}
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
       />
