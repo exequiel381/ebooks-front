@@ -8,14 +8,26 @@ const BookListPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12);
 
   const { data: categories } = useCategories();
-  const { data: books } = useEbooksPaginated({ categoryId });
+  const { data: books, isLoading, error } = useEbooksPaginated({
+    categoryId,
+    page: currentPage,
+    limit: itemsPerPage
+  });
 
   const handleCategoryChange = (category: string) => {
     const newCategoryId = category === 'All' ? undefined : categories?.find(c => c.name === category)?.id;
     setCategoryId(newCategoryId);
     setSelectedCategory(category);
+    setCurrentPage(1); // Reset to first page when category changes
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const toggleSidebar = () => {
@@ -56,16 +68,108 @@ const BookListPage: React.FC = () => {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {books?.data.map((book: Ebook) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-
-          {books?.data.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">No books found in this category.</p>
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
+              <p>Error loading books: {error.message}</p>
+            </div>
+          )}
+
+          {/* Books Grid */}
+          {!isLoading && !error && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {books?.data.map((book: Ebook) => (
+                  <BookCard key={book.id} book={book} />
+                ))}
+              </div>
+
+              {/* Empty State */}
+              {books?.data.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">No books found in this category.</p>
+                </div>
+              )}
+
+              {/* Pagination */}
+              {books && books.meta.totalPages > 1 && (
+                <div className="mt-8 flex justify-center items-center gap-2 flex-wrap">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={!books.meta.hasPrevPage}
+                    className="px-4 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    aria-label="Previous page"
+                  >
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex gap-1 flex-wrap justify-center">
+                    {Array.from({ length: books.meta.totalPages }, (_, i) => i + 1).map((page) => {
+                      // Show first page, last page, current page, and pages around current
+                      const showPage =
+                        page === 1 ||
+                        page === books.meta.totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1);
+
+                      // Show ellipsis
+                      const showEllipsisBefore = page === currentPage - 2 && currentPage > 3;
+                      const showEllipsisAfter = page === currentPage + 2 && currentPage < books.meta.totalPages - 2;
+
+                      if (showEllipsisBefore || showEllipsisAfter) {
+                        return (
+                          <span key={page} className="px-3 py-2 text-gray-500 dark:text-gray-400">
+                            ...
+                          </span>
+                        );
+                      }
+
+                      if (!showPage) return null;
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`px-4 py-2 rounded-md transition-colors duration-200 ${currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                            }`}
+                          aria-label={`Go to page ${page}`}
+                          aria-current={currentPage === page ? 'page' : undefined}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={!books.meta.hasNextPage}
+                    className="px-4 py-2 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    aria-label="Next page"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+
+              {/* Pagination Info */}
+              {books && books.meta.total > 0 && (
+                <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, books.meta.total)} of {books.meta.total} books
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>
