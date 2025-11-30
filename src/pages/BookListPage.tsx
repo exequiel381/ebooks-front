@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import BookCard from '../components/BookCard';
 import Pagination from '../components/Pagination';
+import Loader from '../components/Loader';
 import { useCategories, useEbooksPaginated } from '../hooks';
 import type { Ebook } from '../types/api';
 
@@ -70,11 +71,7 @@ const BookListPage: React.FC = () => {
           </header>
 
           {/* Loading State */}
-          {isLoading && (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
-          )}
+          {isLoading && <Loader />}
 
           {/* Error State */}
           {error && (
