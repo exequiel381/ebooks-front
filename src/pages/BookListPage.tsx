@@ -5,12 +5,16 @@ import { useCategories, useEbooksPaginated } from '../hooks';
 import type { Ebook } from '../types/api';
 
 const BookListPage: React.FC = () => {
-  const { data: books } = useEbooksPaginated();
-  const { data: categories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const { data: categories } = useCategories();
+  const { data: books } = useEbooksPaginated({ categoryId });
+
   const handleCategoryChange = (category: string) => {
+    const newCategoryId = category === 'All' ? undefined : categories?.find(c => c.name === category)?.id;
+    setCategoryId(newCategoryId);
     setSelectedCategory(category);
   };
 
